@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Becky Soltanian</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Becky Soltanian — physical AI, vision-language-action models, and computer vision.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column; hero name wrapped in a detection box; projects as an annotated list */
+:root {
+  --bg: #F2F4F8;
+  --surface: #FFFFFF;
+  --ink: #141821;
+  --muted: #5B6475;
+  --line: #D9DEE8;
+  --box: #2B5BE8;      /* annotation blue */
+  --point: #E8462B;    /* keypoint red */
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1219; --surface: #171B25; --ink: #E9ECF3; --muted: #9AA3B5;
+    --line: #2A3141; --box: #6B8FFF; --point: #FF7558; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1219; --surface: #171B25; --ink: #E9ECF3; --muted: #9AA3B5;
+  --line: #2A3141; --box: #6B8FFF; --point: #FF7558; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0;
+  background: var(--bg); color: var(--ink);
+  font: 400 1rem/1.6 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 56px 72px; display: grid; gap: 72px; }
+a { color: inherit; }
+a:focus-visible { outline: 2px solid var(--box); outline-offset: 3px; border-radius: 2px; }
+
+/* header */
+.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+  font: 500 .8rem/1 var(--mono); letter-spacing: .04em; color: var(--muted); }
+.top nav { display: flex; gap: 20px; }
+.top a { text-decoration: none; }
+.top a:hover { color: var(--ink); }
+
+/* hero */
+.hero { display: grid; gap: 28px; }
+.target { position: relative; justify-self: start; padding: 14px 18px 10px; max-width: 100%; }
+.target h1 {
+  margin: 0; font: 700 clamp(2.6rem, 9vw, 5.2rem)/0.95 var(--display);
+  letter-spacing: -0.03em; text-wrap: balance;
+}
+.bbox { position: absolute; inset: 0; border: 2px solid var(--box); pointer-events: none; }
+.bbox::before, .bbox::after { content: ""; position: absolute; width: 10px; height: 10px; border: 2px solid var(--box); background: var(--bg); }
+.bbox::before { left: -6px; bottom: -6px; }
+.bbox::after { right: -6px; top: -6px; }
+.bbox-label {
+  position: absolute; left: -2px; bottom: 100%;
+  background: var(--box); color: var(--bg);
+  font: 500 .75rem/1 var(--mono); padding: 5px 8px; white-space: nowrap;
+}
+.kp { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--point);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--point) 25%, transparent); }
+.kp.a { right: 18%; top: -5px; }
+.kp.b { left: 38%; bottom: -5px; }
+
+.lede { margin: 0; max-width: 60ch; font-size: 1.15rem; color: var(--muted); }
+.lede strong { color: var(--ink); font-weight: 500; }
+.stack { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.stack li { font: 400 .78rem/1 var(--mono); padding: 7px 10px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); }
+
+/* sections */
+section { display: grid; gap: 20px; }
+.h2 { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.h2 h2 { margin: 0; font: 700 1.5rem/1.2 var(--display); letter-spacing: -0.01em; }
+.h2 span { font: 400 .78rem/1 var(--mono); color: var(--muted); }
+
+/* project list */
+.projects { list-style: none; margin: 0; padding: 0; display: grid; }
+.proj { display: grid; grid-template-columns: 170px 1fr; gap: 8px 28px; padding-block: 22px; border-bottom: 1px solid var(--line); }
+.proj:last-child { border-bottom: 0; }
+.task { font: 500 .75rem/1.4 var(--mono); color: var(--box); padding-top: 6px; }
+.task em { display: block; font-style: normal; color: var(--muted); font-weight: 400; }
+.proj-body { min-width: 0; display: grid; gap: 8px; }
+.proj h3 { margin: 0; font: 700 1.2rem/1.3 var(--display); }
+.proj h3 a { text-decoration: none; background-image: linear-gradient(var(--box), var(--box)); background-size: 0 2px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size .25s; }
+.proj h3 a:hover, .proj h3 a:focus-visible { background-size: 100% 2px; }
+.proj p { margin: 0; color: var(--muted); max-width: 62ch; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 400 .75rem/1.4 var(--mono); color: var(--muted); }
+.stars { color: var(--point); }
+
+/* earlier work */
+.earlier { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 18px 20px; display: grid; gap: 6px; align-content: start; }
+.card h3 { margin: 0; font: 500 1rem/1.3 var(--body); }
+.card p { margin: 0; color: var(--muted); font-size: .92rem; }
+.card a { font: 400 .78rem/1.4 var(--mono); color: var(--box); }
+
+footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font: 400 .78rem/1.4 var(--mono); color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; }
+
+@media (max-width: 600px) {
+  .wrap { padding-block: 32px 56px; gap: 56px; }
+  .proj { grid-template-columns: 1fr; }
+  .task { padding-top: 0; }
+  .task em { display: inline; margin-left: 8px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bbox { animation: draw .9s cubic-bezier(.2,.7,.2,1) both .15s; }
+  .bbox-label { animation: fade .3s ease both .9s; }
+  .kp { animation: fade .3s ease both 1.05s; }
+  @keyframes draw { from { clip-path: inset(0 100% 100% 0); } to { clip-path: inset(-12px -12px -12px -12px); } }
+  @keyframes fade { from { opacity: .0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <span>baharaks.github.io</span>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#earlier">Earlier work</a>
+      <a href="https://github.com/baharaks" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="target">
+      <h1>Becky<br>Soltanian</h1>
+      <div class="bbox" aria-hidden="true"><span class="bbox-label">physical_ai 0.98</span></div>
+      <span class="kp a" aria-hidden="true"></span>
+      <span class="kp b" aria-hidden="true"></span>
+    </div>
+    <p class="lede">I work on <strong>physical AI</strong>, specifically <strong>vision-language-action (VLA) models</strong>: models that take what a robot sees and an instruction in plain language, and output the actions to carry it out. My background is in computer vision: segmentation, keypoint detection, image restoration, and efficient fine-tuning of large models. Most of my work is in Python and PyTorch.</p>
+    <ul class="stack" aria-label="Tools">
+      <li>VLA models</li><li>Robot learning</li><li>Python</li><li>PyTorch</li><li>Segment Anything</li><li>GANs</li><li>Hugging Face</li><li>PEFT / QLoRA</li><li>Roboflow</li><li>R</li><li>MATLAB</li><li>C++</li>
+    </ul>
+  </div>
+
+  <section id="projects">
+    <div class="h2"><h2>Projects</h2><span>7 selected</span></div>
+    <ul class="projects">
+      <li class="proj">
+        <div class="task">segmentation<em>Meta SAM</em></div>
+        <div class="proj-body">
+          <h3><a href="https://github.com/baharaks/SAM_transfer_learning" target="_blank" rel="noopener">Solar panel segmentation with SAM</a></h3>
+          <p>Fine-tunes Meta's Segment Anything Model on solar panel imagery for segmentation and defect detection, with automatic mask generation and a Roboflow data pipeline.</p>
+          <div class="tags"><span>Python</span><span>PyTorch</span><span>transfer learning</span></div>
+        </div>
+      </li>
+      <li class="proj">
+        <div class="task">keypoints<em>regression</em></div>
+        <div class="proj-body">
+          <h3><a href="https://github.com/baharaks/pizza_keypoint_detection" target="_blank" rel="noopener">Pizza keypoint detection</a></h3>
+          <p>A PyTorch training framework for keypoint detection: custom dataset and transforms, model definition, training loop with early stopping, and evaluation.</p>
+          <div class="tags"><span>Python</span><span>PyTorch</span></div>
+        </div>
+      </li>
+      <li class="proj">
+        <div class="task">restoration<em>GAN</em></div>
+        <div class="proj-body">
+          <h3><a href="https://github.com/baharaks/denoise_gan" target="_blank" rel="noopener">Image denoising GAN</a></h3>
+          <p>A generator and discriminator trained adversarially to remove noise from images, with scripts for data preparation, training, and prediction with evaluation metrics.</p>
+          <div class="tags"><span>Python</span><span>PyTorch</span><span>torchvision</span></div>
+        </div>
+      </li>
+      <li class="proj">
+        <div class="task">classification<em>aerial imagery</em></div>
+        <div class="proj-body">
+          <h3><a href="https://github.com/baharaks/roof_top_classification" target="_blank" rel="noopener">Rooftop classification</a></h3>
+          <p>Classifies rooftops from overhead imagery.</p>
+          <div class="tags"><span>Python</span><span class="stars">★ 1</span></div>
+        </div>
+      </li>
+      <li class="proj">
+        <div class="task">nlp<em>efficient fine-tuning</em></div>
+        <div class="proj-body">
+          <h3><a href="https://github.com/baharaks/tinybert_qlora" target="_blank" rel="noopener">TinyBERT with QLoRA</a></h3>
+          <p>Fine-tunes TinyBERT using quantized low-rank adaptation through PEFT, built on Transformers and Datasets.</p>
+          <div class="tags"><span>Python</span><span>transformers</span><span>peft</span></div>
+        </div>
+      </li>
+      <li class="proj">
+        <div class="task">study guide<em>perception</em></div>
+        <div class="proj-body">
+          <h3><a href="https://github.com/baharaks/interview-question-for-perception" target="_blank" rel="noopener">Perception interview questions</a></h3>
+          <p>Notebooks working through interview questions for perception and computer vision roles.</p>
+          <div class="tags"><span>Jupyter</span><span class="stars">★ 7</span></div>
+        </div>
+      </li>
+      <li class="proj">
+        <div class="task">source separation<em>audio</em></div>
+        <div class="proj-body">
+          <h3><a href="https://github.com/baharaks/ICA_Audio" target="_blank" rel="noopener">Cocktail party problem</a></h3>
+          <p>Separates two mixed microphone recordings into their original voices using singular value decomposition, combining R for the math and MATLAB for playback.</p>
+          <div class="tags"><span>R</span><span>MATLAB</span><span class="stars">★ 1</span></div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="earlier">
+    <div class="h2"><h2>Earlier work</h2><span>coursework</span></div>
+    <div class="earlier">
+      <div class="card">
+        <h3>Stanford Machine Learning (Coursera)</h3>
+        <p>Completed exercises 1–8 in MATLAB: regression, neural networks, SVMs, clustering, and anomaly detection.</p>
+        <a href="https://github.com/baharaks/Machine-Learning" target="_blank" rel="noopener">github.com/baharaks/Machine-Learning</a>
+      </div>
+      <div class="card">
+        <h3>C++ interview practice</h3>
+        <p>Practice problems and notes for C++ technical interviews.</p>
+        <a href="https://github.com/baharaks/CPP_interview" target="_blank" rel="noopener">github.com/baharaks/CPP_interview</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Becky Soltanian</span>
+    <a href="https://github.com/baharaks" target="_blank" rel="noopener">github.com/baharaks</a>
+  </footer>
+</div>
+</body>
+</html>
